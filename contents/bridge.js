@@ -165,6 +165,9 @@ window.onerror = function (message, file, line, col, error) {
         }
         case "highlight": {
           if (rendition) {
+            let args = decoded.args
+            args.push((e) => console.log('_handleHighlight: ', e))
+            console.log('args: ', args)
             rendition.annotations.highlight.apply(rendition.annotations, decoded.args);
           } else {
             q.push(message);
