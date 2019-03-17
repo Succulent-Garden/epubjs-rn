@@ -19,7 +19,7 @@ class EpubReader extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      flow: "paginated", // paginated || scrolled-continuous
+      flow: "scrolled-continuous", // paginated || scrolled-continuous
       location: 6,
       url: "https://s3.amazonaws.com/epubjs/books/moby-dick.epub",
       src: "",
@@ -97,10 +97,10 @@ class EpubReader extends Component {
               beforeViewRemoved={(index) => {
                 console.log("removed", index)
               }}
-              onSelected={(cfiRange, rendition) => {
+              onSelected={(cfiRange, rendition, selectedText) => {
                 console.log("selected", cfiRange)
                 // Add marker
-                rendition.highlight(cfiRange, {});
+                rendition.highlight(cfiRange, {'remark': '一二三四五六七八九十一二三四壹贰叁肆伍陆柒捌玖拾'}, 'epubjs-hl-red');
               }}
               onMarkClicked={(cfiRange) => {
                 console.log("mark clicked", cfiRange)
@@ -121,6 +121,7 @@ class EpubReader extends Component {
               onError={(message) => {
                 console.log("EPUBJS-Webview", message);
               }}
+              innerStyle={"setTimeout(() => {(function() { var node = document.createElement('style'); document.body.appendChild(node); window.addStyleString = function(str) { node.innerHTML = str; } }());;addStyleString('.epubjs-hl-red {fill: red; fill-opacity; mix-blend-mode: multiply}')}, 1000); true;"}
             />
             <View
               style={[styles.bar, { top:0 }]}>

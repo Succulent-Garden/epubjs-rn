@@ -230,8 +230,8 @@ class Rendition extends Component {
     }
   }
 
-  highlight (cfiRange, data) {
-    this.sendToBridge("highlight", [cfiRange, data]);
+  highlight (cfiRange, data, className) {
+    this.sendToBridge("highlight", [cfiRange, data, className]);
   }
 
   underline (cfiRange, data) {
@@ -348,8 +348,9 @@ class Rendition extends Component {
         break;
       }
       case "selected": {
-        let {cfiRange} = decoded;
-        this._selected(cfiRange);
+        console.log('[rendition].selcted case: ', decoded)
+        let {cfiRange, selectedText} = decoded;
+        this._selected(cfiRange, selectedText);
         break;
       }
       case "markClicked": {
@@ -384,9 +385,9 @@ class Rendition extends Component {
     }
   }
 
-  _selected(cfiRange) {
+  _selected(cfiRange, selectedText) {
     if (this.props.onSelected) {
-      this.props.onSelected(cfiRange, this);
+      this.props.onSelected(cfiRange, this, selectedText);
     }
   }
 
@@ -444,6 +445,7 @@ class Rendition extends Component {
           automaticallyAdjustContentInsets={false}
           originWhitelist={['*']}
           allowsLinkPreview={false}
+          injectedJavaScript={this.props.innerStyle}
         />
         {!this.state.loaded ? loader : null}
       </View>

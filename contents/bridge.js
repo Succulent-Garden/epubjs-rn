@@ -52,10 +52,12 @@ window.onerror = function (message, file, line, col, error) {
 
     function onMessage(e) {
       var message = e.data;
+      console.log('[epb-bridge] got message: ', message)
       handleMessage(message);
     }
 
     function handleMessage(message) {
+      console.log('[bridge] handleMessage: ', message)
       var decoded = (typeof message == "object") ? message : JSON.parse(message);
       var response;
       var result;
@@ -166,9 +168,33 @@ window.onerror = function (message, file, line, col, error) {
         case "highlight": {
           if (rendition) {
             let args = decoded.args
-            args.push((e) => console.log('_handleHighlight: ', e))
-            console.log('args: ', args)
-            rendition.annotations.highlight.apply(rendition.annotations, decoded.args);
+
+            const cfiRange = args[0]
+            const x = rendition.annotations.highlight(
+              cfiRange,
+              args[1],
+              (e) => {
+                const cfiRange = args[0]
+  
+                if (e.userData != '圆圈') return;
+  
+                const range = new ePub.CFI(cfiRange)
+                const viewContainer = rendition.manager.views.find({index: x.sectionIndex})
+                const innerContents = viewContainer.contents
+  
+                const popup = rendition.annotations.popupMenu(
+                  cfiRange,
+                  {
+                    'texts': [args[1].remark]
+                  },
+                  (e) => {
+                    viewContainer.unpopupMenu()
+                  },
+                )
+              },
+              args[2]
+            )
+            contents.window.getSelection().removeAllRanges()
           } else {
             q.push(message);
           }
@@ -400,8 +426,8 @@ window.onerror = function (message, file, line, col, error) {
         sendMessage({method:"relocated", location: location});
       });
 
-      rendition.on("selected", function (cfiRange) {
-        sendMessage({method:"selected", cfiRange: cfiRange});
+      rendition.on("selected", function (cfiRange, _, selectedText) {
+        sendMessage({method:"selected", cfiRange: cfiRange, selectedText: selectedText});
       });
 
       rendition.on("markClicked", function (cfiRange, data) {
@@ -457,4 +483,12 @@ window.onerror = function (message, file, line, col, error) {
   } else {
     window.addEventListener("load", _ready, false);
   }
+
+  // add css style
+  var node = document.createElement('style');
+  document.body.appendChild(node);
+  window.addStyleString = function(str) {
+      node.innerHTML = str;
+  }
+
 }());
