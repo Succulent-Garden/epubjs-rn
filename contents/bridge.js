@@ -280,6 +280,11 @@ window.onerror = function (message, file, line, col, error) {
           }
           break;
         }
+        case "n2n": {
+          console.log('[bridge.js]n2n->decoded: ', decoded)
+          sendMessage({method: 'n2n', args: decoded.args})
+          break;
+        }
       }
     }
 
@@ -426,7 +431,8 @@ window.onerror = function (message, file, line, col, error) {
         sendMessage({method:"relocated", location: location});
       });
 
-      rendition.on("selected", function (cfiRange, _, selectedText) {
+      rendition.on("selected", function (cfiRange, contents, selectedText) {
+        
         sendMessage({method:"selected", cfiRange: cfiRange, selectedText: selectedText});
       });
 

@@ -1,7 +1,7 @@
 {
   "name": "epubjs-rn",
-  "version": "0.1.0",
-  "repository": "https://github.com/futurepress/epubjs-rn",
+  "version": "0.1.1",
+  "repository": "https://github.com/Succulent-Garden/epubjs-rn",
   "main": "./components/index.js",
   "scripts": {
     "start": "node EpubReader/node_modules/react-native/local-cli/cli.js start",
@@ -15,7 +15,7 @@
   "dependencies": {
     "base-64": "^0.1.0",
     "buffer": "^5.2.1",
-    "epubjs": "Succulent-Garden/epub.js",
+    "epubjs": "file:/Users/pikaurd/Developer/Workspace/playground/epub.js",
     "events": "^3.0.0",
     "i": "^0.3.6",
     "jszip": "^3.1.5",

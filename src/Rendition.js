@@ -372,6 +372,10 @@ class Rendition extends Component {
         this._ready();
         break;
       }
+      case "n2n": {
+        this.props.n2n(decoded)
+        break;
+      }
       default: {
         console.log("msg", decoded);
       }
