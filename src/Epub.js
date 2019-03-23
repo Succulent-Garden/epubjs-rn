@@ -347,6 +347,7 @@ class Epub extends Component<{}> {
         resizeOnOrientationChange={this.props.resizeOnOrientationChange}
         innerStyle={this.props.innerStyle}
         n2n={this.props.n2n}
+        onPopupMenuPress={this.props.onPopupMenuPress}
       />
     );
   }

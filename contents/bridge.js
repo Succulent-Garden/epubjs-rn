@@ -52,12 +52,12 @@ window.onerror = function (message, file, line, col, error) {
 
     function onMessage(e) {
       var message = e.data;
-      console.log('[epb-bridge] got message: ', message)
+      // console.log('[epb-bridge] got message: ', message)
       handleMessage(message);
     }
 
     function handleMessage(message) {
-      console.log('[bridge] handleMessage: ', message)
+      // console.log('[bridge] handleMessage: ', message)
       var decoded = (typeof message == "object") ? message : JSON.parse(message);
       var response;
       var result;
@@ -167,6 +167,39 @@ window.onerror = function (message, file, line, col, error) {
         }
         case "highlight": {
           if (rendition) {
+            // >> highlight start >>
+
+            // let args = decoded.args
+
+            // const cfiRange = args[0]
+            // const x = rendition.annotations.highlight(
+            //   cfiRange,
+            //   args[1],
+            //   (e) => {
+            //     const cfiRange = args[0]
+  
+            //     if (e.userData != '圆圈') return;
+  
+            //     const range = new ePub.CFI(cfiRange)
+            //     const viewContainer = rendition.manager.views.find({index: x.sectionIndex})
+            //     const innerContents = viewContainer.contents
+  
+            //     const popup = rendition.annotations.popupMenu(
+            //       cfiRange,
+            //       {
+            //         'texts': [args[1].remark]
+            //       },
+            //       (e) => {
+            //         viewContainer.unpopupMenu()
+            //       },
+            //     )
+            //   },
+            //   args[2]
+            // )
+            // contents.window.getSelection().removeAllRanges()
+
+            // == == == == == ==
+
             let args = decoded.args
 
             const cfiRange = args[0]
@@ -175,26 +208,34 @@ window.onerror = function (message, file, line, col, error) {
               args[1],
               (e) => {
                 const cfiRange = args[0]
-  
-                if (e.userData != '圆圈') return;
-  
                 const range = new ePub.CFI(cfiRange)
                 const viewContainer = rendition.manager.views.find({index: x.sectionIndex})
-                const innerContents = viewContainer.contents
   
-                const popup = rendition.annotations.popupMenu(
-                  cfiRange,
-                  {
-                    'texts': [args[1].remark]
-                  },
-                  (e) => {
-                    viewContainer.unpopupMenu()
-                  },
-                )
+                if (e.userData != '圆圈') {
+                  rendition.annotations.popupMenu(
+                    cfiRange,
+                    { 'buttons': args[1].buttons },
+                    (e) => { 
+                      if (e.userData) { 
+                        sendMessage({method: 'popupMenu', args: e.userData})
+                        viewContainer.unpopupMenu() 
+                      }
+                    },
+                  )
+                }
+                else {
+                  rendition.annotations.popupMenu(
+                    cfiRange,
+                    { 'texts': [args[1].remark] },
+                    (e) => { viewContainer.unpopupMenu() },
+                  )
+                }
               },
               args[2]
             )
             contents.window.getSelection().removeAllRanges()
+
+            // << highlight end <<
           } else {
             q.push(message);
           }
@@ -281,7 +322,7 @@ window.onerror = function (message, file, line, col, error) {
           break;
         }
         case "n2n": {
-          console.log('[bridge.js]n2n->decoded: ', decoded)
+          // console.log('[bridge.js]n2n->decoded: ', decoded)
           sendMessage({method: 'n2n', args: decoded.args})
           break;
         }

@@ -376,6 +376,12 @@ class Rendition extends Component {
         this.props.n2n(decoded)
         break;
       }
+      case "popupMenu": {
+        if (this.props.onPopupMenuPress) {
+          this.props.onPopupMenuPress(decoded.args)
+        }
+        break;
+      }
       default: {
         console.log("msg", decoded);
       }
