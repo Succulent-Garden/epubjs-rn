@@ -1,5 +1,11 @@
 window.onerror = function (message, file, line, col, error) {
-  var msg = JSON.stringify({method:"error", value: message});
+  var msg = JSON.stringify({method:"error", value: {
+    message: message,
+    file: file,
+    line: line,
+    col: col,
+    error: error
+  }});
   window.postMessage(msg, "*");
 };
 
@@ -167,39 +173,6 @@ window.onerror = function (message, file, line, col, error) {
         }
         case "highlight": {
           if (rendition) {
-            // >> highlight start >>
-
-            // let args = decoded.args
-
-            // const cfiRange = args[0]
-            // const x = rendition.annotations.highlight(
-            //   cfiRange,
-            //   args[1],
-            //   (e) => {
-            //     const cfiRange = args[0]
-  
-            //     if (e.userData != '圆圈') return;
-  
-            //     const range = new ePub.CFI(cfiRange)
-            //     const viewContainer = rendition.manager.views.find({index: x.sectionIndex})
-            //     const innerContents = viewContainer.contents
-  
-            //     const popup = rendition.annotations.popupMenu(
-            //       cfiRange,
-            //       {
-            //         'texts': [args[1].remark]
-            //       },
-            //       (e) => {
-            //         viewContainer.unpopupMenu()
-            //       },
-            //     )
-            //   },
-            //   args[2]
-            // )
-            // contents.window.getSelection().removeAllRanges()
-
-            // == == == == == ==
-
             let args = decoded.args
 
             const cfiRange = args[0]
@@ -224,11 +197,13 @@ window.onerror = function (message, file, line, col, error) {
                   )
                 }
                 else {
-                  rendition.annotations.popupMenu(
-                    cfiRange,
-                    { 'texts': [args[1].remark] },
-                    (e) => { viewContainer.unpopupMenu() },
-                  )
+                  if (args[1].remark && args[1].length > 0) {
+                    rendition.annotations.popupMenu(
+                      cfiRange,
+                      { 'text': args[1].remark },
+                      (e) => { viewContainer.unpopupMenu() },
+                    )
+                  }
                 }
               },
               args[2]
@@ -322,8 +297,7 @@ window.onerror = function (message, file, line, col, error) {
           break;
         }
         case "n2n": {
-          // console.log('[bridge.js]n2n->decoded: ', decoded)
-          sendMessage({method: 'n2n', args: decoded.args})
+          sendMessage({method: 'n2n', args: decoded.value})
           break;
         }
       }
