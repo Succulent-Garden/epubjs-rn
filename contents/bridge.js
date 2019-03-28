@@ -19,6 +19,8 @@ window.onerror = function (message, file, line, col, error) {
       window.postMessage(JSON.stringify(obj), targetOrigin);
     };
 
+    window.currentFontSizeScale = 1.0;
+
     var q = [];
     var _isReady = false;
 
@@ -197,7 +199,7 @@ window.onerror = function (message, file, line, col, error) {
                   )
                 }
                 else {
-                  if (args[1].remark && args[1].length > 0) {
+                  if (args[1].remark && args[1].remark.length > 0) {
                     rendition.annotations.popupMenu(
                       cfiRange,
                       { 'text': args[1].remark },
@@ -244,8 +246,11 @@ window.onerror = function (message, file, line, col, error) {
         }
         case "fontSize": {
           var fontSize = decoded.args[0];
+          var scale = decoded.args[1];
+          window.currentFontSizeScale = scale;
+          console.log('[bridge]->fontSize: ', decoded.args)
           if (rendition) {
-            rendition.themes.fontSize(fontSize);
+            rendition.themes.fontSize(fontSize, window.currentFontSizeScale);
           } else {
             q.push(message);
           }
@@ -309,7 +314,10 @@ window.onerror = function (message, file, line, col, error) {
         overflow: "visible",
         method: "blobUrl",
         fullsize: true,
-        snap: isChrome
+        snap: isChrome,
+        preRenderHook: (doc) => {
+          ePub.utils.updateFontSize(doc, window.currentFontSizeScale)
+        },
       }, options);
 
       window.book = book = ePub(url);

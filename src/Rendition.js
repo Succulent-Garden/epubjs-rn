@@ -98,7 +98,11 @@ class Rendition extends Component {
     }
 
     if (prevProps.fontSize !== this.props.fontSize) {
-      this.fontSize(this.props.fontSize);
+      this.fontSize(this.props.fontSize, this.props.fontScale || 1.0);
+    }
+
+    if (prevProps.fontScale !== this.props.fontScale) {
+      this.fontSize(this.props.fontSize, this.props.fontScale || 1.0);
     }
 
     if (prevProps.font !== this.props.font) {
@@ -160,7 +164,7 @@ class Rendition extends Component {
     }
 
     if (this.props.fontSize) {
-      this.fontSize(this.props.fontSize);
+      this.fontSize(this.props.fontSize, this.props.scale || 1.0);
     }
 
     if (this.props.font) {
@@ -205,8 +209,9 @@ class Rendition extends Component {
     this.sendToBridge("font", [f]);
   }
 
-  fontSize(f) {
-    this.sendToBridge("fontSize", [f]);
+  fontSize(f, scale) {
+    console.log('[Rendition] fontSize: ', [f, scale])
+    this.sendToBridge("fontSize", [f, scale]);
   }
 
   override(name, value, priority) {
