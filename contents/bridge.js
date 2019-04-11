@@ -318,6 +318,17 @@ window.onerror = function (message, file, line, col, error) {
         preRenderHook: (doc) => {
           ePub.utils.updateFontSize(doc, window.currentFontSizeScale)
         },
+        onScrollHook: () => {
+          const render = window.rendition
+          const values = Object.values(render.annotations._annotations)
+          const popups = values.filter(x => x.type = 'popup')
+          if (popups.length == 0) {
+            return;
+          }
+          popups.forEach(element => {
+            render.annotations.remove(element.cfiRange, element.type)
+          });
+        },
       }, options);
 
       window.book = book = ePub(url);
