@@ -185,15 +185,15 @@ window.onerror = function (message, file, line, col, error) {
                 const cfiRange = args[0]
                 const range = new ePub.CFI(cfiRange)
                 const viewContainer = rendition.manager.views.find({index: x.sectionIndex})
-  
+
                 if (e.userData != '圆圈') {
                   rendition.annotations.popupMenu(
                     cfiRange,
                     { 'buttons': args[1].buttons },
-                    (e) => { 
-                      if (e.userData) { 
+                    (e) => {
+                      if (e.userData) {
                         sendMessage({method: 'popupMenu', args: e.userData})
-                        viewContainer.unpopupMenu() 
+                        viewContainer.unpopupMenu()
                       }
                     },
                   )
@@ -455,7 +455,7 @@ window.onerror = function (message, file, line, col, error) {
       });
 
       rendition.on("selected", function (cfiRange, contents, selectedText) {
-        
+
         sendMessage({method:"selected", cfiRange: cfiRange, selectedText: selectedText});
       });
 
