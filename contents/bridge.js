@@ -321,7 +321,7 @@ window.onerror = function (message, file, line, col, error) {
         onScrollHook: () => {
           const render = window.rendition
           const values = Object.values(render.annotations._annotations)
-          const popups = values.filter(x => x.type = 'popup')
+          const popups = values.filter(x => x.type == 'popup')
           if (popups.length == 0) {
             return;
           }
