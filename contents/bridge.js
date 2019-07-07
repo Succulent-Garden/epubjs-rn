@@ -316,7 +316,13 @@ window.onerror = function (message, file, line, col, error) {
         fullsize: true,
         snap: isChrome,
         preRenderHook: (doc) => {
-          ePub.utils.updateFontSize(doc, window.currentFontSizeScale)
+          ePub.utils.updateFontSize(doc, window.currentFontSizeScale);
+            // 新加内容
+          doc.body.querySelectorAll('img').forEach((t) => {
+            t.addEventListener('click', () => {
+              sendMessage({method:"n2n", args: `image:${t.alt}:${t.src}`});
+            });
+          });
         },
         onScrollHook: () => {
           const render = window.rendition
