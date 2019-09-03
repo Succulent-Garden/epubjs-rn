@@ -337,8 +337,8 @@ window.onerror = function (message, file, line, col, error) {
         },
       }, options);
 
-      window.book = book = ePub(url);
-
+      window.book = book = ePub(url, options);
+      
       window.rendition = rendition = book.renderTo(document.body, settings);
 
       rendition.hooks.content.register(function(contents, rendition) {

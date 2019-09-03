@@ -321,6 +321,7 @@ class Epub extends Component<{}> {
           }
         }}
         url={this.props.src}
+        secretKey={this.props.secretKey}
         flow={this.props.flow}
         minSpreadWidth={this.props.minSpreadWidth}
         stylesheet={this.props.stylesheet}

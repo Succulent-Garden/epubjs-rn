@@ -127,6 +127,10 @@ class Rendition extends Component {
       "fullsize": true
     };
 
+    if (this.props.secretKey) {
+      config.secretKey = this.props.secretKey;
+    }
+
     if (this.props.stylesheet) {
       config.stylesheet = this.props.stylesheet;
     }
