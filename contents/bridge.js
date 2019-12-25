@@ -226,6 +226,16 @@ window.onerror = function (message, file, line, col, error) {
           }
           break;
         }
+        case "search": {
+          if (rendition) {
+            rendition.search(decoded.args).then(results => {
+              sendMessage({method: 'search', args: results})
+            });
+          } else {
+            q.push(message)
+          }
+          break;
+        }
         case "themes": {
           var themes = decoded.args[0];
           if (rendition) {
@@ -265,6 +275,7 @@ window.onerror = function (message, file, line, col, error) {
           }
           break;
         }
+
         case "override": {
           if (rendition) {
             rendition.themes.override.apply(rendition.themes, decoded.args);
@@ -338,7 +349,7 @@ window.onerror = function (message, file, line, col, error) {
       }, options);
 
       window.book = book = ePub(url, options);
-      
+
       window.rendition = rendition = book.renderTo(document.body, settings);
 
       rendition.hooks.content.register(function(contents, rendition) {

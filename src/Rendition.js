@@ -217,7 +217,9 @@ class Rendition extends Component {
     console.log('[Rendition] fontSize: ', [f, scale])
     this.sendToBridge("fontSize", [f, scale]);
   }
-
+  search(text) {
+    this.sendToBridge("search", text);
+  }
   override(name, value, priority) {
     this.sendToBridge("override", [name, value, priority]);
   }
@@ -388,6 +390,12 @@ class Rendition extends Component {
       case "popupMenu": {
         if (this.props.onPopupMenuPress) {
           this.props.onPopupMenuPress(decoded.args)
+        }
+        break;
+      }
+      case "search": {
+        if (this.props.searchCallBack) {
+          this.props.searchCallBack(decoded.args)
         }
         break;
       }

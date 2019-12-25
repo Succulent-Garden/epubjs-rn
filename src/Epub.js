@@ -350,6 +350,7 @@ class Epub extends Component<{}> {
         innerStyle={this.props.innerStyle}
         n2n={this.props.n2n}
         onPopupMenuPress={this.props.onPopupMenuPress}
+        searchCallBack={this.props.searchCallBack}
       />
     );
   }
